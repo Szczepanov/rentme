@@ -44,7 +44,7 @@ class HomeGateSpider(scrapy.Spider):
                 if attr_key:
                     attributes_dict.update({attr_key: attr_value})
             yield {
-                'offer_id': uuid.uuid1().int,
+                'offer_id': str(uuid.uuid1().int),
                 'source_id': source_id,
                 'city': city,
                 'street': street,
@@ -52,7 +52,7 @@ class HomeGateSpider(scrapy.Spider):
                 'currency': 'CHF',
                 'url': url,
                 'scrape_time': time.strftime("%Y-%m-%d %H:%M:%S"),
-                'attributes':  attributes_dict
+                'attributes': attributes_dict
             }
 
             next_page_url = response.xpath("//li[@class='next']/a[@rel='next']/@href").extract_first()
