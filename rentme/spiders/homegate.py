@@ -17,7 +17,7 @@ class HomeGateSpider(scrapy.Spider):
         offers = response.xpath('//article[@class="box-row-wrapper"]/a[@class="detail-page-link box-row--link"]')
         for offer in offers:
             try:
-                price = (''.join(offer.xpath('.//div[@class="item-content-label"]/span/text()').extract()).replace(",", "").replace(".\u2013", "")).strip()
+                price = int((''.join(offer.xpath('.//div[@class="item-content-label"]/span/text()').extract()).replace(",", "").replace(".\u2013", "")).strip())
             except Exception:
                 price = None
             try:
@@ -40,8 +40,8 @@ class HomeGateSpider(scrapy.Spider):
             attributes_dict = {}
             if attributes:
                 for attribute in attributes:
-                    attr_key = attribute.xpath("./span[@class='key']/text()").extract_first().strip()
-                    attr_value = attribute.xpath("./span[@class='value']/text()").extract_first().strip()
+                    attr_key = ''.join(attribute.xpath("./span[@class='key']/text()").extract()).strip()
+                    attr_value = ''.join(attribute.xpath("./span[@class='value']/text()").extract()).strip()
                     if attr_key:
                         attributes_dict.update({attr_key: attr_value})
             if source_id:
@@ -50,7 +50,7 @@ class HomeGateSpider(scrapy.Spider):
                     'source_id': source_id,
                     'city': city,
                     'street': street,
-                    'price': int(price),
+                    'price': price,
                     'currency': 'CHF',
                     'url': url,
                     'scrape_time': time.strftime("%Y-%m-%d %H:%M:%S"),
